@@ -1,0 +1,399 @@
+{
+"openapi": "3.0.1",
+"info": {
+"title": "Online Book Library Application",
+"description": "Documentation for Online Book Library Application",
+"contact": {
+"name": "Sajal halder",
+"email": "sajal.halder@bjitcademy.com"
+},
+"version": "1.0"
+},
+"servers": [
+{
+"url": "http://localhost:8080",
+"description": "Generated server url"
+}
+],
+"paths": {
+"/books/update/bookId/{bookId}": {
+"put": {
+"tags": [
+"book-controller"
+],
+"operationId": "updateBook",
+"parameters": [
+{
+"name": "bookId",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/BookRequest"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+},
+"/user/register": {
+"post": {
+"tags": [
+"user-controller"
+],
+"operationId": "registerUser",
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/RegisterRequest"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"type": "object"
+}
+}
+}
+}
+}
+}
+},
+"/user/login": {
+"post": {
+"tags": [
+"user-controller"
+],
+"operationId": "loginUser",
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/LoginRequest"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"type": "object"
+}
+}
+}
+}
+}
+}
+},
+"/books/create": {
+"post": {
+"tags": [
+"book-controller"
+],
+"operationId": "createBook",
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/BookRequest"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+},
+"/books/id/{bookId}": {
+"get": {
+"tags": [
+"book-controller"
+],
+"operationId": "getBookById",
+"parameters": [
+{
+"name": "bookId",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+},
+"/books/author/{authorName}": {
+"get": {
+"tags": [
+"book-controller"
+],
+"operationId": "getBooksByAuthorName",
+"parameters": [
+{
+"name": "authorName",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"type": "array",
+"items": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+}
+},
+"/books/author-title/{authorName}/{bookTitle}": {
+"get": {
+"tags": [
+"book-controller"
+],
+"operationId": "getBookByAuthorNameAndTitle",
+"parameters": [
+{
+"name": "authorName",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+},
+{
+"name": "bookTitle",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+},
+"/books/all": {
+"get": {
+"tags": [
+"book-controller"
+],
+"operationId": "getAllBooks",
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"type": "array",
+"items": {
+"$ref": "#/components/schemas/BookResponse"
+}
+}
+}
+}
+}
+}
+}
+},
+"/books/delete/bookId/{bookId}": {
+"delete": {
+"tags": [
+"book-controller"
+],
+"operationId": "deleteBook",
+"parameters": [
+{
+"name": "bookId",
+"in": "path",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"*/*": {
+"schema": {
+"type": "object"
+}
+}
+}
+}
+}
+}
+}
+},
+"components": {
+"schemas": {
+"BookRequest": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+},
+"authorName": {
+"type": "string"
+},
+"genre": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"price": {
+"type": "number",
+"format": "double"
+}
+}
+},
+"BookResponse": {
+"type": "object",
+"properties": {
+"bookId": {
+"type": "integer",
+"format": "int64"
+},
+"title": {
+"type": "string"
+},
+"authorName": {
+"type": "string"
+},
+"genre": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"price": {
+"type": "number",
+"format": "double"
+}
+}
+},
+"RegisterRequest": {
+"required": [
+"address",
+"email",
+"firstName",
+"lastName",
+"password",
+"roles"
+],
+"type": "object",
+"properties": {
+"firstName": {
+"type": "string"
+},
+"lastName": {
+"type": "string"
+},
+"email": {
+"type": "string"
+},
+"password": {
+"type": "string"
+},
+"address": {
+"type": "string"
+},
+"roles": {
+"type": "array",
+"items": {
+"type": "string"
+}
+}
+}
+},
+"LoginRequest": {
+"type": "object",
+"properties": {
+"email": {
+"type": "string"
+},
+"password": {
+"type": "string"
+}
+}
+}
+}
+}
+}
