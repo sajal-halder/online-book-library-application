@@ -9,9 +9,14 @@ import com.sajal.onlinebooklibraryapplication.entity.UserEntity;
 import com.sajal.onlinebooklibraryapplication.exception.UserAlreadyExistException;
 import com.sajal.onlinebooklibraryapplication.exception.UserCredentialException;
 import com.sajal.onlinebooklibraryapplication.repository.UserRepository;
+import com.sajal.onlinebooklibraryapplication.service.JwtService;
 import com.sajal.onlinebooklibraryapplication.service.RoleService;
 import com.sajal.onlinebooklibraryapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -22,6 +27,11 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest) {
         if(userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
@@ -33,10 +43,9 @@ public class UserServiceImpl implements UserService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
-                .password(registerRequest.getPassword())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .roles(roles)
                 .build();
-        //TODO: add password encoder here
 
         UserEntity userEntity = userRepository.save(user);
         return RegisterResponse.builder()
@@ -51,16 +60,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
         var user = userRepository.findByEmail(loginRequest.getEmail());
-        if(user.isEmpty()){
-            throw new UserCredentialException("No User found with this email");
-        }
-        else {
-            // TODO: add authentication here
-        }
+        authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(),
+                loginRequest.getPassword()
+        ));
+
+        var jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(loginRequest.getEmail()));
 
         return LoginResponse.builder()
-                .token("static token")
-                .email(user.get().getEmail())
+                .token(jwtToken)
                 .build();
 
     }

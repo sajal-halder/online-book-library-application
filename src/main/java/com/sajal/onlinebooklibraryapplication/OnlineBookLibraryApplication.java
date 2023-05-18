@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class OnlineBookLibraryApplication {
@@ -14,7 +15,7 @@ public class OnlineBookLibraryApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleService roleService) {
+	CommandLineRunner run(RoleService roleService, PasswordEncoder encoder) {
 		return args -> {
 			roleService.addRole("ADMIN");
 			roleService.addRole("CUSTOMER");
