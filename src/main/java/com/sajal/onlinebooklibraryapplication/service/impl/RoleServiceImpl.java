@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleEntity addRole(String roleName) {
-        if(!roleRepository.findByRoleName(roleName).isPresent()){
+        if(roleRepository.findByRoleName(roleName).isEmpty()){
             RoleEntity role =new RoleEntity();
             role.setRoleName(roleName);
          return   roleRepository.save(role);

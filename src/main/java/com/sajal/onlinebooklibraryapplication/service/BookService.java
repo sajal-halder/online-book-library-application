@@ -10,8 +10,10 @@ public interface BookService {
  public BookResponse getBookByBookId(String bookId);
  public BookResponse getBookByAuthorNameAndBookTitle(String authorName,String bookTitle);
 
+ public List<BookResponse> getAllBooksByAuthorName(String authorName);
+
  public BookResponse createBook(BookRequest bookRequest);
  public BookResponse updateBookById(Long bookId,BookRequest bookRequest);
- public void deleteBookById(Long bookId);
+ public String deleteBookById(Long bookId);
 
 }

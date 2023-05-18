@@ -3,12 +3,14 @@ package com.sajal.onlinebooklibraryapplication.service.impl;
 import com.sajal.onlinebooklibraryapplication.dto.BookRequest;
 import com.sajal.onlinebooklibraryapplication.dto.BookResponse;
 import com.sajal.onlinebooklibraryapplication.entity.BookEntity;
+import com.sajal.onlinebooklibraryapplication.exception.BookAlreadyExistException;
 import com.sajal.onlinebooklibraryapplication.exception.BookNotFoundException;
 import com.sajal.onlinebooklibraryapplication.repository.BookRepository;
 import com.sajal.onlinebooklibraryapplication.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,7 +19,20 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     @Override
     public List<BookResponse> getAllBooks() {
-        return null;
+        List<BookEntity> bookEntities = bookRepository.findAll();
+        List<BookResponse> bookResponses = new ArrayList<>();
+        bookEntities.forEach(bookEntity -> bookResponses.add(
+                BookResponse.builder()
+                        .bookId(bookEntity.getBookId())
+                        .title(bookEntity.getTitle())
+                        .authorName(bookEntity.getAuthorName())
+                        .genre(bookEntity.getGenre())
+                        .price(bookEntity.getPrice())
+                        .description(bookEntity.getDescription())
+                        .build()
+        ));
+        return bookResponses;
+
     }
 
     @Override
@@ -39,21 +54,92 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse getBookByAuthorNameAndBookTitle(String authorName, String bookTitle) {
-        return null;
+        var book = bookRepository.findByTitleAndAuthorName(bookTitle,authorName);
+        if(book.isEmpty()){
+            throw new BookNotFoundException("No book found with the matching title and author");
+        }
+        BookEntity bookEntity = book.get();
+        return BookResponse.builder()
+                .bookId(bookEntity.getBookId())
+                .title(bookEntity.getTitle())
+                .authorName(bookEntity.getAuthorName())
+                .genre(bookEntity.getGenre())
+                .price(bookEntity.getPrice())
+                .description(bookEntity.getDescription())
+                .build();
+    }
+
+    @Override
+    public List<BookResponse> getAllBooksByAuthorName(String authorName) {
+        List<BookEntity> bookEntities = bookRepository.findAllByAuthorName(authorName);
+        List<BookResponse> bookResponses = new ArrayList<>();
+        bookEntities.forEach(bookEntity -> bookResponses.add(
+                BookResponse.builder()
+                        .bookId(bookEntity.getBookId())
+                        .title(bookEntity.getTitle())
+                        .authorName(bookEntity.getAuthorName())
+                        .genre(bookEntity.getGenre())
+                        .price(bookEntity.getPrice())
+                        .description(bookEntity.getDescription())
+                        .build()
+        ));
+        return bookResponses;
     }
 
     @Override
     public BookResponse createBook(BookRequest bookRequest) {
-        return null;
+        if(bookRepository.findByTitleAndAuthorName(bookRequest.getTitle(),bookRequest.getAuthorName()).isPresent()){
+            throw new BookAlreadyExistException("Book with same title and Author already exist");
+        }
+        BookEntity bookEntity =bookRepository.save(BookEntity.builder()
+                .authorName(bookRequest.getAuthorName())
+                .title(bookRequest.getTitle())
+                .price(bookRequest.getPrice())
+                .genre(bookRequest.getGenre())
+                .description(bookRequest.getDescription())
+                .build());
+        return BookResponse.builder()
+                .bookId(bookEntity.getBookId())
+                .title(bookEntity.getTitle())
+                .authorName(bookEntity.getAuthorName())
+                .genre(bookEntity.getGenre())
+                .price(bookEntity.getPrice())
+                .description(bookEntity.getDescription())
+                .build();
+
     }
 
     @Override
     public BookResponse updateBookById(Long bookId, BookRequest bookRequest) {
-        return null;
+        var book = bookRepository.findById(bookId);
+        if(book.isEmpty()){
+            throw new BookNotFoundException("No book found with matching id");
+        }
+        BookEntity bookEntity = book.get();
+        bookEntity.setAuthorName(bookRequest.getAuthorName());
+        bookEntity.setDescription(bookRequest.getDescription());
+        bookEntity.setTitle(bookRequest.getTitle());
+        bookEntity.setGenre(bookRequest.getGenre());
+        bookEntity.setPrice(bookRequest.getPrice());
+
+        BookEntity updatedBookId = bookRepository.save(bookEntity);
+        return BookResponse.builder()
+                .bookId(updatedBookId.getBookId())
+                .title(updatedBookId.getTitle())
+                .authorName(updatedBookId.getAuthorName())
+                .genre(updatedBookId.getGenre())
+                .price(updatedBookId.getPrice())
+                .description(updatedBookId.getDescription())
+                .build();
     }
 
     @Override
-    public void deleteBookById(Long bookId) {
-
+    public String deleteBookById(Long bookId) {
+        var book = bookRepository.findById(bookId);
+        if(book.isEmpty()){
+            throw  new BookNotFoundException("No book found with matching id");
+        }
+        bookRepository.deleteById(bookId);
+        return "Book Deleted";
     }
 }
