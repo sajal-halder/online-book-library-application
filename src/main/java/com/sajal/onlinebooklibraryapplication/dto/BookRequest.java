@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class BookRequest {
-    private Long bookId;
-    private String title,authorName,genre,description;;
+    private String title,authorName,genre,description;
     private Double price;
 }

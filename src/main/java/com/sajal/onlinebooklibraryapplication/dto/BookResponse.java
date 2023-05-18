@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 public class BookResponse {
     private Long bookId;
-    private String title,authorName,genre;
+    private String title,authorName,genre,description;
     private Double price;
-    private String description;
 }
