@@ -6,6 +6,7 @@ import com.sajal.onlinebooklibraryapplication.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class BookController {
     public ResponseEntity<Object> createBook(@Valid @RequestBody BookRequest bookRequest , BindingResult bindingResult){
         ResponseEntity<Object> errors = bindingService.getBindingError(bindingResult);
         if (errors != null) return errors;
-        return ResponseEntity.ok(bookService.createBook(bookRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(bookRequest));
     }
 
     @PutMapping("/update/bookId/{bookId}")
