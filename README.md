@@ -1,6 +1,3 @@
-Certainly! Here's the generated Markdown file from the provided OpenAPI specification:
-
----
 
 # Online Book Library Application
 
