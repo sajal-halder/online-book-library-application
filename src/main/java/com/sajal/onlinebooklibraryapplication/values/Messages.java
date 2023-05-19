@@ -11,6 +11,8 @@ public class Messages {
     public static String  USER_REGISTER_SUCCESS = "User Registration success";
     public static String  INVALID_EMAIL = "Invalid email";
     public static String  INVALID_PASSWORD = "Invalid password";
+    public static String  INVALID_TOKEN = "Invalid Token";
+    public static String  MISSING_HEADER = "Missing AuthorizationHeader";
 
 
 }

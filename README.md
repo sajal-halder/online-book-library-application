@@ -7,6 +7,33 @@ Documentation for Online Book Library Application
 *Email:* sajal.halder@bjitcademy.com  
 *Version:* 1.0
 
+##  Online Book Library
+A simple online book library REST application using Spring Boot.
+featuring authentication and authorization with jwt token 
+
+
+
+
+### Entities:
+#### Book:
+- id
+- title
+- author
+- genre
+- price
+- description
+#### User:
+- first name
+- last name
+- email
+- password
+- address
+- roles : Many-to-Many relation
+#### Role:
+- id
+- role name
+
+
 ## Endpoints
 
 
