@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sajal.onlinebooklibraryapplication.values.Messages.INVALID_EMAIL;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -30,7 +32,7 @@ public class ApplicationConfig {
            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                var user = userRepository.findByEmail(email);
                if(user.isEmpty()){
-                   throw new BadCredentialsException("Invalid email");
+                   throw new BadCredentialsException(INVALID_EMAIL);
                }
                UserEntity userEntity = user.get();
                List<SimpleGrantedAuthority> authorities = new ArrayList<>();

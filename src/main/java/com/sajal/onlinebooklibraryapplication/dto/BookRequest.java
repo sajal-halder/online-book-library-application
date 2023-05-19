@@ -2,6 +2,7 @@ package com.sajal.onlinebooklibraryapplication.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,6 @@ public class BookRequest {
     private String genre;
     @NotEmpty(message = "description is required")
     private String description;
-    @NotEmpty(message = "price is required")
+    @NotNull(message = "price is required")
     private Double price;
 }

@@ -11,13 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static com.sajal.onlinebooklibraryapplication.values.Messages.*;
+
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-
 
 
     @Override
@@ -28,11 +29,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         if (userDetails == null) {
-            throw new BadCredentialsException("Invalid email");
+            throw new BadCredentialsException(INVALID_EMAIL);
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
+            throw new BadCredentialsException(INVALID_PASSWORD);
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());

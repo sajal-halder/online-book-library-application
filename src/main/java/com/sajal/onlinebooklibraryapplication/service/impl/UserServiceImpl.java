@@ -7,7 +7,6 @@ import com.sajal.onlinebooklibraryapplication.dto.RegisterResponse;
 import com.sajal.onlinebooklibraryapplication.entity.RoleEntity;
 import com.sajal.onlinebooklibraryapplication.entity.UserEntity;
 import com.sajal.onlinebooklibraryapplication.exception.UserAlreadyExistException;
-import com.sajal.onlinebooklibraryapplication.exception.UserCredentialException;
 import com.sajal.onlinebooklibraryapplication.repository.UserRepository;
 import com.sajal.onlinebooklibraryapplication.service.JwtService;
 import com.sajal.onlinebooklibraryapplication.service.RoleService;
@@ -22,6 +21,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.sajal.onlinebooklibraryapplication.values.Messages.USER_REGISTER_SUCCESS;
+import static com.sajal.onlinebooklibraryapplication.values.Messages.USER_WITH_EMAIL_EXIST;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest) {
         if(userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
-            throw new UserAlreadyExistException("User with email already exist");
+            throw new UserAlreadyExistException(USER_WITH_EMAIL_EXIST);
         }
         Set<RoleEntity> roles = new HashSet<>();
         registerRequest.getRoles().forEach(value-> roles.add(roleService.getRole(value)));
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
         return RegisterResponse.builder()
                 .id(userEntity.getUserId())
                 .email(userEntity.getEmail())
-                .message("User Registration success")
+                .message(USER_REGISTER_SUCCESS)
                 .build();
     }
 
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
-        var user = userRepository.findByEmail(loginRequest.getEmail());
+
         authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(),
                 loginRequest.getPassword()

@@ -1,5 +1,6 @@
 package com.sajal.onlinebooklibraryapplication.config;
 
+import com.sajal.onlinebooklibraryapplication.entity.RoleEnum;
 import com.sajal.onlinebooklibraryapplication.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +30,9 @@ public class SecurityConfig {
                 .requestMatchers("/user/**","/api-docs/**")
                 .permitAll()
                 .requestMatchers("/books/create","/books/update/**","/books/delete/**")
-                .hasAuthority("ADMIN")
+                .hasAuthority(RoleEnum.ADMIN.name())
                 .requestMatchers("/books/all","/books/id/**","/books/author-title/**","/books/author/**")
-                .hasAnyAuthority("ADMIN","CUSTOMER")
+                .hasAnyAuthority(RoleEnum.ADMIN.name(),RoleEnum.CUSTOMER.name())
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sajal.onlinebooklibraryapplication.values.Messages.*;
+
+
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
@@ -39,7 +42,7 @@ public class BookServiceImpl implements BookService {
     public BookResponse getBookByBookId(String bookId) {
         var book = bookRepository.findById(Long.parseLong(bookId));
         if(book.isEmpty()){
-            throw new BookNotFoundException("No book found with the matching id");
+            throw new BookNotFoundException(NO_BOOK_WITH_ID);
         }
         BookEntity bookEntity = book.get();
         return BookResponse.builder()
@@ -56,7 +59,7 @@ public class BookServiceImpl implements BookService {
     public BookResponse getBookByAuthorNameAndBookTitle(String authorName, String bookTitle) {
         var book = bookRepository.findByTitleAndAuthorName(bookTitle,authorName);
         if(book.isEmpty()){
-            throw new BookNotFoundException("No book found with the matching title and author");
+            throw new BookNotFoundException(NO_BOOK_WITH_TITLE_AUTHOR);
         }
         BookEntity bookEntity = book.get();
         return BookResponse.builder()
@@ -89,7 +92,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponse createBook(BookRequest bookRequest) {
         if(bookRepository.findByTitleAndAuthorName(bookRequest.getTitle(),bookRequest.getAuthorName()).isPresent()){
-            throw new BookAlreadyExistException("Book with same title and Author already exist");
+            throw new BookAlreadyExistException(BOOK_EXIST_WITH_TITLE_AUTHOR);
         }
         BookEntity bookEntity =bookRepository.save(BookEntity.builder()
                 .authorName(bookRequest.getAuthorName())
@@ -113,7 +116,7 @@ public class BookServiceImpl implements BookService {
     public BookResponse updateBookById(Long bookId, BookRequest bookRequest) {
         var book = bookRepository.findById(bookId);
         if(book.isEmpty()){
-            throw new BookNotFoundException("No book found with matching id");
+            throw new BookNotFoundException(NO_BOOK_WITH_ID);
         }
         BookEntity bookEntity = book.get();
         bookEntity.setAuthorName(bookRequest.getAuthorName());
@@ -137,9 +140,9 @@ public class BookServiceImpl implements BookService {
     public String deleteBookById(Long bookId) {
         var book = bookRepository.findById(bookId);
         if(book.isEmpty()){
-            throw  new BookNotFoundException("No book found with matching id");
+            throw  new BookNotFoundException(NO_BOOK_WITH_ID);
         }
         bookRepository.deleteById(bookId);
-        return "Book Deleted";
+        return BOOK_DELETED;
     }
 }

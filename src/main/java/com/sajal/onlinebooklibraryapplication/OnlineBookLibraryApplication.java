@@ -1,5 +1,6 @@
 package com.sajal.onlinebooklibraryapplication;
 
+import com.sajal.onlinebooklibraryapplication.entity.RoleEnum;
 import com.sajal.onlinebooklibraryapplication.service.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,8 +18,8 @@ public class OnlineBookLibraryApplication {
 	@Bean
 	CommandLineRunner run(RoleService roleService, PasswordEncoder encoder) {
 		return args -> {
-			roleService.addRole("ADMIN");
-			roleService.addRole("CUSTOMER");
+			roleService.addRole(RoleEnum.ADMIN);
+			roleService.addRole(RoleEnum.CUSTOMER);
 		};
 	}
 
