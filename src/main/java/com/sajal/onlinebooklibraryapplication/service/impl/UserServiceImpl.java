@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         }
         Set<RoleEntity> roles = new HashSet<>();
         registerRequest.getRoles().forEach(value-> roles.add(roleService.getRole(value)));
-        var user = UserEntity.builder()
+        UserEntity user = UserEntity.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 loginRequest.getPassword()
         ));
 
-        var jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(loginRequest.getEmail()));
+        String jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(loginRequest.getEmail()));
 
         return LoginResponse.builder()
                 .token(jwtToken)
