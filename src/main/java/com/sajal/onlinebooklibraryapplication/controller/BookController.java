@@ -22,7 +22,7 @@ public class BookController {
     private final BindingService bindingService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<BookResponse>> getAllBooks(){
+    public ResponseEntity<Object> getAllBooks(){
         return ResponseEntity.ok( bookService.getAllBooks());
     }
 
@@ -37,7 +37,7 @@ public class BookController {
     }
 
     @GetMapping("/author/{authorName}")
-    public ResponseEntity<List<BookResponse>> getBooksByAuthorName(@PathVariable String authorName){
+    public ResponseEntity<Object> getBooksByAuthorName(@PathVariable String authorName){
         return ResponseEntity.ok(bookService.getAllBooksByAuthorName(authorName));
     }
 
